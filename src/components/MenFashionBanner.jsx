@@ -4,15 +4,13 @@ import { useState, useEffect } from "react";
 function MenFashionBanner() {
   const [activeSlide, setActiveSlide] = useState(0);
 
-  // Multiple banner images
   const bannerImages = [
     "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1400",
     "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1400",
-    "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=1400",
+    "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
     "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=1400",
   ];
 
-  // Automatically change images every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % bannerImages.length);
@@ -23,6 +21,56 @@ function MenFashionBanner() {
 
   return (
     <section className="mx-2 my-4 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+
+      {/* Custom Animations */}
+      <style>{`
+        @keyframes fadeUp {
+          from {
+            opacity: 0;
+            transform: translateY(25px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .man-photo {
+          animation: fadeUp 0.8s ease-out both;
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Laptop Hover Animation */
+        @media (hover: hover) and (pointer: fine) {
+          .man-photo:hover img {
+            transform: scale(1.12);
+          }
+
+          .man-photo:hover {
+            border-color: #93c5fd;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+          }
+        }
+
+        /* Mobile Touch Animation */
+        @media (hover: none) {
+          .man-photo:active img {
+            transform: scale(1.12);
+          }
+
+          .man-photo:active {
+            transform: scale(0.97);
+            border-color: #93c5fd;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .man-photo {
+            animation: none;
+            transition: none;
+          }
+        }
+      `}</style>
 
       <div className="grid grid-cols-1 md:grid-cols-[35%_65%]">
 
@@ -36,20 +84,28 @@ function MenFashionBanner() {
           <div className="grid grid-cols-2 gap-3">
 
             {/* First Image */}
-            <div className="group h-44 overflow-hidden border border-gray-200 bg-gray-50">
+            <div
+              style={{ animationDelay: "150ms" }}
+              className="man-photo group h-44 cursor-pointer overflow-hidden border border-gray-200 bg-gray-50 transition-all duration-300"
+            >
               <img
                 src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=500"
                 alt="Men's fashion"
-                className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
+                loading="lazy"
+                className="h-full w-full object-cover object-top transition-transform duration-700 ease-out"
               />
             </div>
 
             {/* Second Image */}
-            <div className="group h-44 overflow-hidden border border-gray-200 bg-gray-50">
+            <div
+              style={{ animationDelay: "350ms" }}
+              className="man-photo group h-44 cursor-pointer overflow-hidden border border-gray-200 bg-gray-50 transition-all duration-300"
+            >
               <img
                 src="https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=500"
                 alt="Men's formal fashion"
-                className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
+                loading="lazy"
+                className="h-full w-full object-cover object-top transition-transform duration-700 ease-out"
               />
             </div>
 
@@ -65,7 +121,8 @@ function MenFashionBanner() {
               key={index}
               src={image}
               alt={`Fashion collection ${index + 1}`}
-              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out group-hover:scale-105 ${
+              loading={index === 0 ? "eager" : "lazy"}
+              className={`absolute inset-0 h-full w-full object-cover transition-all duration-1000 ease-in-out ${
                 activeSlide === index
                   ? "scale-100 opacity-100"
                   : "scale-105 opacity-0"
@@ -107,21 +164,6 @@ function MenFashionBanner() {
 
         </div>
       </div>
-
-      {/* Custom Animation */}
-      <style>{`
-        @keyframes fadeUp {
-          from {
-            opacity: 0;
-            transform: translateY(25px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
-
     </section>
   );
 }
