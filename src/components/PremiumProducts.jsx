@@ -5,46 +5,117 @@ const products = [
     name: "Pulvinar augue",
     oldPrice: "",
     price: "$89.00",
-    image:
-      "https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?w=500",
+    image: "https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?w=500",
   },
   {
     id: 2,
     name: "Marius ligula",
     oldPrice: "$55.00",
     price: "$27.00",
-    image:
-      "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=500",
+    image: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=500",
   },
   {
     id: 3,
     name: "Rorbi pulvina",
     oldPrice: "",
     price: "$79.00",
-    image:
-      "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=500",
+    image: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=500",
   },
   {
     id: 4,
     name: "Morbi varius",
     oldPrice: "$65.00",
     price: "$45.00",
-    image:
-      "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=500",
+    image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=500",
   },
   {
     id: 5,
     name: "Fusce nec",
     oldPrice: "$100.00",
     price: "$99.00",
-    image:
-      "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=500",
+    image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=500",
   },
 ];
 
 function PremiumProducts() {
   return (
-    <section className="w-full bg-gray-100 px-2 py-4 sm:px-4 sm:py-5 md:px-6">
+    <section className="w-full overflow-hidden bg-gray-100 px-2 py-4 sm:px-4 sm:py-5 md:px-6">
+
+      {/* Component Animations */}
+      <style>{`
+        @keyframes productEnter {
+          from {
+            opacity: 0;
+            transform: translateY(25px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes bannerEnter {
+          from {
+            opacity: 0;
+            transform: translateX(25px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        .product-card {
+          animation: productEnter 0.7s ease-out both;
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        .ad-card {
+          animation: bannerEnter 0.8s ease-out both;
+        }
+
+        /* Desktop Hover Animation */
+        @media (hover: hover) and (pointer: fine) {
+          .product-card:hover {
+            transform: translateY(-6px);
+            border-color: #93c5fd;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.10);
+          }
+
+          .product-card:hover img {
+            transform: scale(1.12);
+          }
+
+          .ad-card:hover {
+            transform: scale(1.02);
+          }
+        }
+
+        /* Mobile Touch Animation */
+        @media (hover: none) {
+          .product-card:active {
+            transform: scale(0.96);
+            border-color: #93c5fd;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+          }
+
+          .product-card:active img {
+            transform: scale(1.08);
+          }
+
+          .ad-card:active {
+            transform: scale(0.98);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .product-card,
+          .ad-card {
+            animation: none;
+            transition: none;
+          }
+        }
+      `}</style>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_155px] xl:grid-cols-[minmax(0,1fr)_170px]">
 
@@ -57,7 +128,7 @@ function PremiumProducts() {
               Premium Products
             </h2>
 
-            <button className="text-xs font-semibold text-blue-700 hover:text-blue-900 sm:text-sm">
+            <button className="text-xs font-semibold text-blue-700 transition-colors duration-300 hover:text-blue-900 active:scale-95 sm:text-sm">
               See All →
             </button>
           </div>
@@ -65,10 +136,11 @@ function PremiumProducts() {
           {/* Product Grid */}
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-5">
 
-            {products.map((product) => (
+            {products.map((product, index) => (
               <div
                 key={product.id}
-                className="group min-w-0 rounded-lg border border-gray-200 bg-white p-2 text-center transition duration-300 hover:shadow-lg sm:p-3"
+                style={{ animationDelay: `${index * 150}ms` }}
+                className="product-card group min-w-0 cursor-pointer rounded-lg border border-gray-200 bg-white p-2 text-center transition-all duration-300 sm:p-3"
               >
 
                 {/* Product Image */}
@@ -78,7 +150,7 @@ function PremiumProducts() {
                     src={product.image}
                     alt={product.name}
                     loading="lazy"
-                    className="h-full w-full object-contain transition duration-300 group-hover:scale-105"
+                    className="h-full w-full object-contain transition-transform duration-500 ease-out"
                   />
 
                 </div>
@@ -97,7 +169,7 @@ function PremiumProducts() {
                     </span>
                   )}
 
-                  <span className="font-bold text-gray-900">
+                  <span className="font-bold text-blue-700">
                     {product.price}
                   </span>
 
@@ -110,7 +182,7 @@ function PremiumProducts() {
         </div>
 
         {/* Flight Ticket Advertisement */}
-        <div className="flex min-h-48 items-center justify-center overflow-hidden rounded-lg bg-blue-900 p-3 sm:min-h-56 lg:min-h-full">
+        <div className="ad-card flex min-h-48 items-center justify-center overflow-hidden rounded-lg bg-blue-900 p-3 transition-transform duration-300 sm:min-h-56 lg:min-h-full">
 
           <div className="flex min-h-44 w-full flex-col items-center justify-center border border-blue-400 bg-blue-800 px-3 py-4 text-center text-white sm:min-h-52 lg:min-h-64">
 
@@ -128,12 +200,11 @@ function PremiumProducts() {
               40% OFF
             </p>
 
-            <button className="mt-4 rounded-full border border-white px-4 py-2 text-xs font-semibold transition hover:bg-white hover:text-blue-900 sm:text-sm">
+            <button className="mt-4 rounded-full border border-white px-4 py-2 text-xs font-semibold transition-all duration-300 hover:bg-white hover:text-blue-900 active:scale-95 sm:text-sm">
               BOOK NOW
             </button>
 
           </div>
-
         </div>
 
       </div>
@@ -142,3 +213,4 @@ function PremiumProducts() {
 }
 
 export default PremiumProducts;
+
