@@ -1,3 +1,4 @@
+
 const products = [
   {
     id: 1,
@@ -53,6 +54,58 @@ function Clothing() {
   return (
     <section className="bg-white px-4 py-8 md:px-6">
 
+      {/* Component Animations */}
+      <style>{`
+        @keyframes clothingEnter {
+          from {
+            opacity: 0;
+            transform: translateY(25px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .clothing-card {
+          animation: clothingEnter 0.7s ease-out both;
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Desktop Hover Animation */
+        @media (hover: hover) and (pointer: fine) {
+          .clothing-card:hover {
+            transform: translateY(-6px);
+            border-color: #93c5fd;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.10);
+          }
+
+          .clothing-card:hover img {
+            transform: scale(1.12);
+          }
+        }
+
+        /* Mobile Touch Animation */
+        @media (hover: none) {
+          .clothing-card:active {
+            transform: scale(0.96);
+            border-color: #93c5fd;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+          }
+
+          .clothing-card:active img {
+            transform: scale(1.08);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .clothing-card {
+            animation: none;
+            transition: none;
+          }
+        }
+      `}</style>
+
       {/* Section Heading */}
       <h2 className="mb-6 text-lg font-semibold text-gray-700">
         Clothing and Girls Collections
@@ -61,17 +114,20 @@ function Clothing() {
       {/* Product Grid */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 lg:gap-4">
 
-        {products.map((product) => (
+        {products.map((product, index) => (
           <div
             key={product.id}
-            className="group border border-gray-200 bg-white p-3 text-center transition duration-300 hover:shadow-lg"
+            style={{ animationDelay: `${index * 150}ms` }}
+            className="clothing-card group cursor-pointer border border-gray-200 bg-white p-3 text-center transition-all duration-300"
           >
+
             {/* Product Image */}
             <div className="flex h-40 items-center justify-center overflow-hidden sm:h-48">
               <img
                 src={product.image}
                 alt={product.name}
-                className="h-full w-full object-contain transition duration-300 group-hover:scale-105"
+                loading="lazy"
+                className="h-full w-full object-contain transition-transform duration-500 ease-out"
               />
             </div>
 
@@ -92,6 +148,7 @@ function Clothing() {
                 {product.price}
               </span>
             </div>
+
           </div>
         ))}
 
